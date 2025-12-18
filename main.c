@@ -11,28 +11,44 @@ typedef struct Student {
 
 Student* createNode(int studentID, char* name ){
     Student* newStudent = (Student*)malloc(sizeof(Student));
+    if (newStudent == NULL) {
+    return NULL;
+}
+
     newStudent->studentID = studentID; 
-    strcpy(newStudent->name, name); 
+    
+    // copy to name field of studentID, not make the program count "\0"
+    strncpy(newStudent->name, name, sizeof(newStudent->name) - 1);
+    newStudent->name[49] = '\0';
+
+    //make it a leaf node with no left or right 
     newStudent->left = newStudent->right = NULL; 
+    
     return newStudent; 
 }
 
 
 Student* insert (Student* root, int studentID, char* name) {
 
-if (root == NULL) return createNode (studentID, name);
+    if (root == NULL) {
+        printf("Done Inserting student with ID: %d\n", studentID);
+        return createNode (studentID, name);
+        
+    }
 
-if (studentID < root->studentID)
-    root->left = insert (root->left, studentID, name);
-
-else if (studentID > root->studentID)
-
-    root->right = insert (root->right, studentID, name);
-else
-
+   if (studentID < root->studentID) {
+    root->left = insert(root->left, studentID, name);
+    
+}
+else if (studentID > root->studentID) {
+    root->right = insert(root->right, studentID, name);
+    
+}
+else {
     printf("Student with student ID %d already exists.\n", studentID);
-    return root; 
+}
 
+    return root;
 }
 
 void inorderTraversal (Student* root) {
@@ -47,10 +63,14 @@ if (root != NULL) {
 Student* search (Student* root, int studentID) {
 
     if (root == NULL || root->studentID == studentID) return root;
-    if (studentID < root->studentID) return search (root->left, studentID);
-    return search (root->right, studentID);
+    if (studentID < root->studentID) 
+            { return search (root->left, studentID);
+        }
+    else
+        return search (root->right, studentID);
 }
 
+// 
 Student* findMin (Student* root) {
     while (root->left != NULL) root = root->left;
     return root;
@@ -84,9 +104,16 @@ Student* deleteNode (Student* root, int studentID) {
     return root;   
 }
 
+void freeTree(Student* root) {
+    if (root == NULL)
+        return;
 
-// 
-///////
+    freeTree(root->left);   
+    freeTree(root->right);  
+    free(root);             
+}
+
+
 
 int main() {
     Student* root = NULL;
@@ -95,7 +122,7 @@ int main() {
     ;
 
     do {
-    printf("\n--- Student Management System ---\n");
+    printf("\n--- Student Directory Office ---\n");
     printf("1. Add Student\n");
     printf("2. Display All Students\n");
 
@@ -134,7 +161,6 @@ int main() {
     case 4:
     {
 
-
         printf("Enter student ID to Delete: ");
         scanf("%d", &studentID);
         root = deleteNode (root, studentID);
@@ -144,18 +170,20 @@ int main() {
     case 5:
     {
         printf("Exiting...\n");
+        exit(0);
+    }
     
         default:
         
         printf("Invalid choice! Please try again.\n");
     
-    }
+    
 }
 
    } while (choice != 5);
 
     
-    
+    freeTree(root);  // avoid memory leak 
     return 0;
 } 
     
