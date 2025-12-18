@@ -86,7 +86,7 @@ Student* deleteNode (Student* root, int studentID) {
 
 
 // 
-
+///////
 
 int main() {
     Student* root = NULL;
@@ -144,7 +144,8 @@ int main() {
     case 5:
     {
         printf("Exiting...\n");
-    default:
+    
+        default:
         
         printf("Invalid choice! Please try again.\n");
     
