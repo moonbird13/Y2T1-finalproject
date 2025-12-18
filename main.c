@@ -11,8 +11,9 @@ typedef struct Student {
 
 Student* createNode(int studentID, char* name ){
     Student* newStudent = (Student*)malloc(sizeof(Student));
-    if (newStudent == NULL) {
-    return NULL;
+    
+    if (newStudent == NULL) { // if malloc fails 
+        return NULL;
 }
 
     newStudent->studentID = studentID; 
@@ -24,7 +25,7 @@ Student* createNode(int studentID, char* name ){
     //make it a leaf node with no left or right 
     newStudent->left = newStudent->right = NULL; 
     
-    return newStudent; 
+    return newStudent;   // to make it saved on heap in newstudent
 }
 
 
@@ -48,7 +49,7 @@ else {
     printf("Student with student ID %d already exists.\n", studentID);
 }
 
-    return root;
+    return root;  // so that the caller will see the change too
 }
 
 void inorderTraversal (Student* root) {
@@ -58,8 +59,7 @@ if (root != NULL) {
 
     inorderTraversal(root->right);
 }
-else 
-    printf("No Student Record\n"); 
+
 } 
 //
 Student* search (Student* root, int studentID) {
@@ -72,7 +72,7 @@ Student* search (Student* root, int studentID) {
         return search (root->right, studentID);
 }
 
-// 
+// find inorder successor
 Student* findMin (Student* root) {
     while (root->left != NULL) root = root->left;
     return root;
