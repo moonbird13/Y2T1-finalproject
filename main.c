@@ -58,6 +58,8 @@ if (root != NULL) {
 
     inorderTraversal(root->right);
 }
+else 
+    printf("No Student Record\n"); 
 } 
 //
 Student* search (Student* root, int studentID) {
